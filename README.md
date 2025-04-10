@@ -55,10 +55,11 @@ demoblaze-automation/
 ├── allure-results/ # Allure raw reports
 ├── screenshots/ # Captures
 └── pom.xml # Maven dependencies
+└── testng.xml # configuration file for organizing and executing tests in TestNG
 ```
 
 ### Installation
 ```bash
-git clone https://github.com/yourusername/demoblaze-automation.git
-cd demoblaze-automation
-Open the folder
+- git clone https://github.com/yourusername/demoblaze-automation.git
+- cd demoblaze-automation
+- use: mvn test -Pend-to-end-tests (To Run the Project Suite)
