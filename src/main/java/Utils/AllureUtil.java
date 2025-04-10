@@ -8,11 +8,10 @@ import java.nio.file.Path;
 
 public class AllureUtil {
 
-    //public static final String ALLURE_RESULTS_DIR = "test-outputs/allure-results";
-
     private AllureUtil() {
         super();
     }
+
 
     public static void attachLogsToAllureReport()
     {

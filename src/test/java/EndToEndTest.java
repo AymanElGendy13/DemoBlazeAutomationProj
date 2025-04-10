@@ -5,6 +5,8 @@ import org.testng.Assert;
 import org.testng.annotations.*;
 import Listeners.TestNGListeners;
 
+import static Utils.PropertiesUtil.getPropertyValue;
+
 @Listeners(TestNGListeners.class)
 public class EndToEndTest {
 
@@ -21,7 +23,7 @@ public class EndToEndTest {
     @BeforeMethod
     public void setUp() {
         //Driver instance
-        DriverManager.createDriverInstance("chrome");
+        DriverManager.createDriverInstance(getPropertyValue("browserType"));
         //Initialize pages object
         demoBlaze = new DemoBlaze();
         //Perform actions
@@ -30,7 +32,7 @@ public class EndToEndTest {
     }
 
     // Login --> Choose Category & Product --> Check Cart --> Place Order --> Purchase --> OK
-    @Test(enabled =true)
+    @Test(enabled =true,invocationCount = 1,priority = 1)
     public void standardUserPurchaseFlow() {
 
         // Login
@@ -83,7 +85,7 @@ public class EndToEndTest {
                 .clickPurchaseOk();
     }
 
-    @Test(enabled = true)
+    @Test(enabled =true,invocationCount = 1,priority = 2)
     public void registeredUserFullJourney()
     // Signup --> Login --> Choose Prod --> Contact --> Choose Prod --> Check Cart --> Place Order --> Purchase --> OK
     {
@@ -132,7 +134,6 @@ public class EndToEndTest {
                 testDataTwo.getJsonData("assertions.productName"),
                 "Product name is not correct");
 
-        //demoBlaze.getCartPage().deleteProduct("MacBook Pro");
 
         demoBlaze.navigateToNavbar("about us")
                 .getTextAboutUs()
@@ -152,6 +153,55 @@ public class EndToEndTest {
 
         demoBlaze.navigateToNavbar("logout");
 
+    }
+
+    @Test(enabled = true , invocationCount = 1 , priority = 3)
+    public void cartManagement() {
+
+        // Login
+        demoBlaze.navigateToNavbar("login")
+                .login(
+                        testDataTwo.getJsonData("login.username"),
+                        testDataTwo.getJsonData("login.password")
+                );
+
+        // Verify login
+        String welcomeText = demoBlaze.returnUsername();
+        Assert.assertEquals(welcomeText,
+                testDataTwo.getJsonData("assertions.welcomeText"),
+                "Username is not correct");
+
+        demoBlaze.chooseProduct(
+                testDataTwo.getJsonData("chooseProduct[0].category"),
+                testDataTwo.getJsonData("chooseProduct[0].product")
+        );
+        demoBlaze.getProductPage().addToCartAndVerify().addToCartAndVerify();
+        demoBlaze.navigateToNavbar("home")
+        .chooseProduct(
+                testDataTwo.getJsonData("chooseProduct[1].category"),
+                testDataTwo.getJsonData("chooseProduct[1].product")
+        );
+        demoBlaze.getProductPage().addToCartAndVerify();
+
+        demoBlaze.navigateToNavbar("cart").getCartPage().deleteProduct("MacBook Pro");
+
+        double price = demoBlaze.getCartPage().getTotalCartPrice();
+        Assert.assertEquals(price,
+                demoBlaze.getCartPage().totalPrice(),
+                "Total price is not correct");
+
+        demoBlaze.getCartPage()
+                .placeOrder()
+                .setTotalOrder(
+                        testDataTwo.getJsonData("order.name"),
+                        testDataTwo.getJsonData("order.country"),
+                        testDataTwo.getJsonData("order.city"),
+                        testDataTwo.getJsonData("order.creditCard"),
+                        testDataTwo.getJsonData("order.month"),
+                        testDataTwo.getJsonData("order.year"))
+                .clickPurchaseOk();
+
+        demoBlaze.navigateToNavbar("logout");
     }
 
     @AfterMethod

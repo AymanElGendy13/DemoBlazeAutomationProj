@@ -22,7 +22,9 @@ public class BrowserFactory {
             default -> new FirefoxDriver();
         };
     }
-/*    public static WebDriver getBrowser(String browserName) {
+
+
+    /*public static WebDriver getBrowser(String browserName) {
         return switch (browserName.toLowerCase()) {
             case "chrome" -> {
                 ChromeOptions chromeOptions = getChromeOptions();
@@ -41,12 +43,11 @@ public class BrowserFactory {
 
     private static FirefoxOptions getFirefoxOptions() {
         FirefoxOptions firefoxOptions = new FirefoxOptions();
-        firefoxOptions.addArguments("--start-maximized");
         firefoxOptions.addArguments("--disable-infobars");
         firefoxOptions.addArguments("--disable-extensions");
         firefoxOptions.addArguments("--disable-notifications");
 
-        if(PropertiesUtil.getPropertyValue("executionType").equalsIgnoreCase("local")) {
+        if(!PropertiesUtil.getPropertyValue("executionType").equalsIgnoreCase("local")) {
             firefoxOptions.addArguments("--headless");
         }
 
@@ -57,11 +58,10 @@ public class BrowserFactory {
 
     private static EdgeOptions getEdgeOptions() {
         EdgeOptions edgeOptions = new EdgeOptions();
-        edgeOptions.addArguments("--start-maximized");
         edgeOptions.addArguments("--disable-infobars");
         edgeOptions.addArguments("--disable-extensions");
         edgeOptions.addArguments("--disable-notifications");
-        if(PropertiesUtil.getPropertyValue("executionType").equalsIgnoreCase("local")) {
+        if(!PropertiesUtil.getPropertyValue("executionType").equalsIgnoreCase("local")) {
             edgeOptions.addArguments("--headless");
         }
         Map<String,Object> edgePrefs = Map.of("profile.default_content_setting_values.notifications", 2
@@ -75,11 +75,10 @@ public class BrowserFactory {
 
     private static ChromeOptions getChromeOptions() {
         ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("--start-maximized");
         chromeOptions.addArguments("--disable-infobars");
         chromeOptions.addArguments("--disable-extensions");
         chromeOptions.addArguments("--disable-notifications");
-        if(PropertiesUtil.getPropertyValue("executionType").equalsIgnoreCase("local")) {
+        if(!PropertiesUtil.getPropertyValue("executionType").equalsIgnoreCase("local")) {
             chromeOptions.addArguments("--headless");
         }
 

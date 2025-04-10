@@ -8,8 +8,14 @@ import core.ui.Label;
 import core.ui.TextBox;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CartPage extends DemoBlaze {
@@ -30,7 +36,7 @@ public class CartPage extends DemoBlaze {
     private final By logoPic = By.cssSelector(".sa-line.sa-long.animateSuccessLong");
 
     //public static final By prodcutTable = By.cssSelector("table.table");
-    //public static final By productRows = By.cssSelector("tbody tr.success");
+    public static final By productRows = By.cssSelector("tbody tr.success");
     //public static final By productTitle = By.xpath(".//td[contains(@class,'title') or contains(text(),'')]");
     //public static final By productPrice = By.xpath(".//td[contains(@class,'price')  or string-length(text()) > 0]");
     //private static Button deleteBtn = new Button(By.xpath("//a[contains(text(),'Delete')]"));
@@ -123,64 +129,43 @@ public class CartPage extends DemoBlaze {
         purchaseOkBtn.click();
     }
 
-    /*
-    public static Map<String, Double> getAllProducts() {
-        Waits.waitForElementVisible(DriverManager.getDriver(), prodcutTable);
+    public void deleteProduct(String deleteThis) {
+        Waits.waitForElementVisible(DriverManager.getDriver(), productRows);
         List<WebElement> rows = DriverManager.getDriver().findElements(productRows);
-        Map<String, Double> products = new LinkedHashMap<>();
-
         for (WebElement row : rows) {
-            try {
-                String name = row.findElement(productTitle).getText().trim();
-                String priceText = row.findElement(productPrice)
-                        .getText()
-                        .replaceAll("[^\\d.]", "");
-                double price = Double.parseDouble(priceText);
-                products.put(name, price);
-            } catch (Exception e) {
-                System.err.println("Error parsing product row: " + e.getMessage());
+            String itemName = row.findElement(By.cssSelector("td:nth-child(2)")).getText();
+            if (itemName.equals(deleteThis)) {
+                row.findElement(By.tagName("a")).click();
             }
         }
-        return products;
+        DriverManager.getDriver().navigate().refresh();
     }
 
+    public double getTotalCartPrice() {
+        Waits.waitForElementVisible(DriverManager.getDriver(), totalPRICE.getLocator());
+        By rowLocator = By.cssSelector("#tbodyid tr.success");
+        By priceCellLocator = By.xpath("./td[3]");  // Directly targets the 3rd column (price)
+        double total = 0.0;
+        WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(10));
 
-    public double calculateTotalPrice() {
-        return getAllProducts().values().stream()
-                .mapToDouble(Double::doubleValue)
-                .sum();
-    }
-
-
-    public static double getProductPrice(String productName) {
-        Map<String, Double> products = getAllProducts();
-        if (!products.containsKey(productName)) {
-            throw new NoSuchElementException("Product '" + productName + "' not found");
-        }
-        return products.get(productName);
-    }
-
-
-    public void deleteProduct(String prodName) {
-        Waits.waitForElementVisible(DriverManager.getDriver(), prodcutTable);
-        List<WebElement> rows = DriverManager.getDriver().findElements(productRows);
+        // Wait for ALL rows to be visible (not just the first)
+        List<WebElement> rows = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(rowLocator));
 
         for (WebElement row : rows) {
+            // Wait for the PRICE CELL in the current row to be visible
+            WebElement priceCell = wait.until(ExpectedConditions.visibilityOf(
+                    row.findElement(priceCellLocator)
+            ));
+
+            // Parse and sum the price
+            String priceText = priceCell.getText().trim();
             try {
-                String currentName = row.findElement(productTitle)
-                        .getText()
-                        .trim();
-                if (currentName.equalsIgnoreCase(prodName)) {
-                    row.findElement(deleteBtn.getLocator()).click();
-                    Waits.waitForElementNotPresent(DriverManager.getDriver(), row);
-                    return;
-                }
-            } catch (StaleElementReferenceException e) {
-                // Row disappeared during iteration (probably deleted by another process)
-                continue;
+                total += Double.parseDouble(priceText.replaceAll("[^\\d.]", ""));
+            } catch (NumberFormatException e) {
+                System.err.println("Skipping invalid price: " + priceText);
             }
         }
-        throw new NoSuchElementException("Product '" + prodName + "' not found");
+        return total;
     }
-    */
+
 }

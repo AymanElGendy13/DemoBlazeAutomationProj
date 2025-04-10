@@ -12,6 +12,8 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import java.util.List;
 
+import static Utils.PropertiesUtil.getPropertyValue;
+
 //vars
 //locators
 //actions
@@ -77,7 +79,7 @@ public class DemoBlaze {
     //Actions
     @Step("Open DemoBlaze site")
     public void openSite() {
-        DriverManager.navigateToUrl("https://www.demoblaze.com/", true);
+        DriverManager.navigateToUrl(getPropertyValue("baseURL"), true);
     }
 
     @Step("Navigate to navbar: {navbarName}")

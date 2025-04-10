@@ -65,4 +65,15 @@ public class FilesUtil {
 
     }
 
+    public static void createDirectory(File dirPath) {
+        if (!dirPath.exists()) {
+            if (dirPath.mkdirs()) {
+                Logs.info("Created directory: " + dirPath.getAbsolutePath());
+            } else {
+                Logs.warn("Failed to create directory: " + dirPath.getAbsolutePath());
+            }
+        } else {
+            Logs.info("Directory already exists: " + dirPath.getAbsolutePath());
+        }
+    }
 }

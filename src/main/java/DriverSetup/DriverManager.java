@@ -14,11 +14,11 @@ public class DriverManager {
     private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
 
     @Step("Create Driver Instance On: {browserName}")
-    public static WebDriver createDriverInstance(String browserName) {
+    public static void createDriverInstance(String browserName) {
         WebDriver driver = BrowserFactory.getBrowser(browserName);
         Logs.info("Created Driver instance: " + driver);
         setDriver(driver);
-        return getDriver();
+        getDriver();
     }
 
     public static void setDriver(WebDriver driver) {

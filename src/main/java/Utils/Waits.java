@@ -8,9 +8,13 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
 
+import static Utils.PropertiesUtil.getPropertyValue;
+
 public class Waits {
 
-    private static final int EXPLICIT_WAIT = 10;
+    private static final int EXPLICIT_WAIT = Integer.parseInt(getPropertyValue("explicitWait"));
+
+
 
     private Waits() {
     }
