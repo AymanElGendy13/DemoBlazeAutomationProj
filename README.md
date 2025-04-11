@@ -19,7 +19,7 @@ Link: [demoblaze Website](https://www.demoblaze.com/)
   - TestNG Listeners for custom reporting.
   - Smart element waits with fluent patterns.
   - Cross-browser support (Chrome/Firefox/Edge).
-  - CI/CD ready (Jenkins/GitHub Actions compatible) [Working On It]
+  - CI/CD ready (Jenkins/GitHub Actions compatible).
 
 ## 🛠️ Technologies Used
 
@@ -60,6 +60,6 @@ demoblaze-automation/
 
 ### Installation
 ```bash
-- git clone https://github.com/yourusername/demoblaze-automation.git
+- git clone https://github.com/AymanElGendy13/demoblaze-automation.git
 - cd demoblaze-automation
-- use: mvn test -Pend-to-end-tests (To Run the Project Suite)
+- use: mvn test -Pend-to-end-tests (To Run the Project Suite) or Run directly through testng.xml file.
