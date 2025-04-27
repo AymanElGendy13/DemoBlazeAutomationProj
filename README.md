@@ -1,4 +1,4 @@
-# DemoBlaze Automation Framework
+# DemoBlaze Automation Framework Using Selenium
 <a href="https://selenium.dev"><img src="https://selenium.dev/images/selenium_logo_square_green.png" width="50" alt="Selenium"/></a>
 ![Java](https://img.shields.io/badge/Java-23-red) ![Selenium](https://img.shields.io/badge/Selenium-4.29-blue) ![TestNG](https://img.shields.io/badge/TestNG-7.11-orange) ![Allure](https://img.shields.io/badge/Reporting-AllureReports-green)
 
